@@ -1,19 +1,21 @@
 package com.techacademy.service;
 
 import java.util.List;
+import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.techacademy.entity.User;
 import com.techacademy.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
-
 @Service
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
+    
+    public UserService(UserRepository repository) {
+        this.userRepository = repository;
+    }
     
     /** 全体を検索して返す */
     public List<User> getUsersList() {
@@ -30,5 +32,13 @@ public class UserService {
     @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+    
+    /** Userの削除を行う */
+    @Transactional
+    public void deleteUser(Set<Integer> idck) {
+        for (Integer id : idck) {
+            userRepository.deleteById(id);
+        }
     }
 }
